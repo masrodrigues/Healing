@@ -50,3 +50,14 @@ def cadastro_medico(request):
 
         messages.add_message(request, constants.SUCCESS, 'Cadatro médico realizado com sucesso.')
         return redirect('/medicos/abrir_horario')# vaidar error
+
+
+def abrir_horario(request):
+
+    if not is_medico(request.user):
+        messages.add_message(request, constants.WARNING, 'Somente médicos podem acessar essa página.')
+        return redirect('/usuarios/sair')
+
+    if request.method == "GET":
+        dados_medicos = DadosMedico.objects.get(user=request.user)
+        return render(request, 'abrir_horario.html', {'dados_medicos': dados_medicos})
